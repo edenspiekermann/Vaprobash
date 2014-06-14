@@ -95,7 +95,7 @@ Vagrant.configure("2") do |config|
   # If using VMWare Fusion
   config.vm.provider :vmware_fusion do |vb|
     # If using VMWare Fusion Provider:
-    # config.vm.box_url = "http://files.vagrantup.com/precise64_vmware.box"
+    config.vm.box_url = "http://files.vagrantup.com/precise64_vmware.box"
 
     # Set server memory
     vb.vmx["memsize"] = server_memory
