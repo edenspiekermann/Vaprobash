@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Config Github Settings
-github_username = "fideloper"
+github_username = "edenspiekermann"
 github_repo     = "Vaprobash"
 github_branch   = "master"
 github_url      = "https://raw.githubusercontent.com/#{github_username}/#{github_repo}/#{github_branch}"
@@ -17,8 +17,8 @@ hostname        = "vaprobash.dev"
 #   10.0.0.1    - 10.255.255.254
 #   172.16.0.1  - 172.31.255.254
 #   192.168.0.1 - 192.168.255.254
-server_ip             = "192.168.22.10"
-server_memory         = "384" # MB
+server_ip             = "192.168.33.10"
+server_memory         = "512" # MB
 server_swap           = "768" # Options: false | int (MB) - Guideline: Between one or two times the server_memory
 server_timezone       = "UTC"
 
@@ -31,9 +31,8 @@ pgsql_root_password   = "root"   # We'll assume user "root"
 # Languages and Packages
 ruby_version          = "latest" # Choose what ruby version should be installed (will also be the default version)
 ruby_gems             = [        # List any Ruby Gems that you want to install
-  #"jekyll",
-  #"sass",
-  #"compass",
+  "sass",
+  "compass",
 ]
 
 # To install HHVM instead of PHP, set this to "true"
@@ -52,16 +51,16 @@ composer_packages     = [        # List any global Composer packages that you wa
 # Laravel's public directory is assumed "public"
 public_folder         = "/vagrant"
 
-laravel_root_folder   = "/vagrant/laravel" # Where to install Laravel. Will `composer install` if a composer.json file exists
-laravel_version       = "latest-stable" # If you need a specific version of Laravel, set it here
-symfony_root_folder   = "/vagrant/symfony" # Where to install Symfony.
+# laravel_root_folder   = "/vagrant/laravel" # Where to install Laravel. Will `composer install` if a composer.json file exists
+# laravel_version       = "latest-stable" # If you need a specific version of Laravel, set it here
+# symfony_root_folder   = "/vagrant/symfony" # Where to install Symfony.
 
 nodejs_version        = "latest"   # By default "latest" will equal the latest stable version
 nodejs_packages       = [          # List any global NodeJS packages that you want to install
-  #"grunt-cli",
+  "grunt-cli",
   #"gulp",
-  #"bower",
-  #"yo",
+  "bower",
+  "yo",
 ]
 
 Vagrant.configure("2") do |config|
@@ -98,6 +97,7 @@ Vagrant.configure("2") do |config|
     # vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     # vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 
+    vb.name = "espi-dev"
   end
 
   # If using VMWare Fusion
@@ -107,6 +107,7 @@ Vagrant.configure("2") do |config|
     # Set server memory
     vb.vmx["memsize"] = server_memory
 
+    vb.name = "espi-dev"
   end
 
   # If using Vagrant-Cachier
@@ -130,7 +131,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "#{github_url}/scripts/base.sh", args: [github_url, server_swap]
 
   # Provision PHP
-  config.vm.provision "shell", path: "#{github_url}/scripts/php.sh", args: [server_timezone, hhvm]
+  # config.vm.provision "shell", path: "#{github_url}/scripts/php.sh", args: [server_timezone, hhvm]
 
   # Enable MSSQL for PHP
   # config.vm.provision "shell", path: "#{github_url}/scripts/mssql.sh"
