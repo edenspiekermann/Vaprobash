@@ -76,6 +76,10 @@ Vagrant.configure("2") do |config|
   # Create a static IP
   config.vm.network :private_network, ip: server_ip
 
+  # Port translation:
+  # config.vm.network "forwarded_port", guest: 80, host: 80
+  # config.vm.network "forwarded_port", guest: 3000, host: 3000
+
   # Use NFS for the shared folder
   config.vm.synced_folder ".", "/vagrant",
             id: "core",
