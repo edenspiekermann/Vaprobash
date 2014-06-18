@@ -33,10 +33,16 @@ curl -L https://gist.githubusercontent.com/fideloper/2710970/raw/vhost.sh > vhos
 sudo chmod guo+x vhost
 sudo mv vhost /usr/local/bin
 
+a2dissite 000-default
+
 # Create a virtualhost to start, with SSL certificate
 sudo vhost -s $1.xip.io -d $public_folder -p /etc/ssl/xip.io -c xip.io
 
+sudo sed -i "s/Require all granted/# Require all granted/" /etc/apache2/sites-enabled/$1.xip.io.conf
+
 if [[ $PHP_IS_INSTALLED ]]; then
+  sudo apt-get install -y libapache2-mod-php5
+
   # xdebug Config
   cat > $(find /etc/php5 -name xdebug.ini) << EOF
   zend_extension=$(find /usr/lib/php5 -name xdebug.so)
