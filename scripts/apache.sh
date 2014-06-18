@@ -23,6 +23,7 @@ sudo apt-get update
 
 # Install Apache
 # sudo apt-get install -y apache2-mpm-event libapache2-mod-fastcgi
+sudo apt-get install apache2
 
 echo ">>> Configuring Apache"
 
