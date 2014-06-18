@@ -68,8 +68,8 @@ EOF
   sudo sed -i "s/html_errors = .*/html_errors = On/" /etc/php5/apache2/php.ini
 
   # PHP Date Timezone
-  sudo sed -i "s/;date.timezone =.*/;date.timezone = Europe\/Berlin/" /etc/php5/apache2/php.ini
-  sudo sed -i "s/;date.timezone =.*/;date.timezone = Europe\/Berlin/" /etc/php5/cli/php.ini
+  sudo sed -i "s/;date.timezone =.*/date.timezone = Europe\/Berlin/" /etc/php5/apache2/php.ini
+  sudo sed -i "s/;date.timezone =.*/date.timezone = Europe\/Berlin/" /etc/php5/cli/php.ini
 fi
 
 sudo service apache2 restart
