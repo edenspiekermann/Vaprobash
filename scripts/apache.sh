@@ -36,22 +36,34 @@ sudo mv vhost /usr/local/bin
 # Create a virtualhost to start, with SSL certificate
 sudo vhost -s $1.xip.io -d $public_folder -p /etc/ssl/xip.io -c xip.io
 
-# if [[ $PHP_IS_INSTALLED ]]; then
-#     # PHP Config for Apache
-#     cat > /etc/apache2/conf-available/php5-fpm.conf << EOF
-#     <IfModule mod_fastcgi.c>
-#             AddHandler php5-fcgi .php
-#             Action php5-fcgi /php5-fcgi
-#             Alias /php5-fcgi /usr/lib/cgi-bin/php5-fcgi
-#             FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi -socket /var/run/php5-fpm.sock -pass-header Authorization
-#             <Directory /usr/lib/cgi-bin>
-#                     Options ExecCGI FollowSymLinks
-#                     SetHandler fastcgi-script
-#                     Require all granted
-#             </Directory>
-#     </IfModule>
-# EOF
-#     sudo a2enconf php5-fpm
-# fi
+if [[ $PHP_IS_INSTALLED ]]; then
+  # xdebug Config
+  cat > $(find /etc/php5 -name xdebug.ini) << EOF
+  zend_extension=$(find /usr/lib/php5 -name xdebug.so)
+  xdebug.remote_enable = 1
+  xdebug.remote_connect_back = 1
+  xdebug.remote_port = 9000
+  xdebug.scream=1
+  xdebug.cli_color=1
+  xdebug.show_local_vars=1
+  xdebug.max_nesting_level=1000
+
+  ; var_dump display
+  xdebug.var_display_max_depth = 5
+  xdebug.var_display_max_children = 256
+  xdebug.var_display_max_data = 1024
+  EOF
+
+  sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php5/apache2/php.ini
+
+  # PHP Error Reporting Config
+  sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
+  sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
+  sed -i "s/html_errors = .*/html_errors = On/" /etc/php5/apache2/php.ini
+
+  # PHP Date Timezone
+  sed -i "s/;date.timezone =.*/date.timezone = ${2/\//\\/}/" /etc/php5/apache2/php.ini
+  sed -i "s/;date.timezone =.*/date.timezone = ${2/\//\\/}/" /etc/php5/cli/php.ini
+fi
 
 sudo service apache2 restart
