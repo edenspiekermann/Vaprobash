@@ -42,7 +42,7 @@ sudo sed -i "s/Require all granted/# Require all granted/" /etc/apache2/sites-en
 
 if [[ $PHP_IS_INSTALLED ]]; then
   sudo apt-get install -y libapache2-mod-php5 php-pear php5-dev make apache2-prefork-dev
-  sudo printf "\n" | pecl install apc
+  sudo yes '' | pecl install -f apc
 
   # xdebug Config
   cat > $(find /etc/php5 -name xdebug.ini) << EOF
