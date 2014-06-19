@@ -41,7 +41,8 @@ sudo vhost -s $1.xip.io -d $public_folder -p /etc/ssl/xip.io -c xip.io
 sudo sed -i "s/Require all granted/# Require all granted/" /etc/apache2/sites-enabled/$1.xip.io.conf
 
 if [[ $PHP_IS_INSTALLED ]]; then
-  sudo apt-get install -y libapache2-mod-php5
+  sudo apt-get install -y libapache2-mod-php5 php-pear php5-dev make apache2-prefork-dev
+  sudo printf "\n" | pecl install apc
 
   # xdebug Config
   cat > $(find /etc/php5 -name xdebug.ini) << EOF
@@ -58,6 +59,10 @@ xdebug.max_nesting_level=1000
 xdebug.var_display_max_depth = 5
 xdebug.var_display_max_children = 256
 xdebug.var_display_max_data = 1024
+EOF
+
+  cat > /etc/php5/apache2/conf.d/apc.ini << EOF
+extension=apc.so
 EOF
 
   sudo sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php5/apache2/php.ini
